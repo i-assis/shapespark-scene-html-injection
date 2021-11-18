@@ -1,0 +1,46 @@
+<style>
+#banner {
+   position: absolute;
+   top: 220px;
+   z-index: 10;
+}
+#banner-img {
+   display: block;
+   margin-left: 220px;
+   margin-right: auto;
+   height: auto; 
+   width: auto; 
+   max-width: 300px; 
+   max-height: 300px;
+}
+.fadeout {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 4s, opacity 4s linear;
+}
+</style>
+<video 	 
+		class="video-js vjs-default-skin" 
+		width="640" 
+		height="264" 
+		src="file:///C:\Users\MirkinLAB\Documents\Shapespark\teste_israel_2\extra-assets\Original.mp4" type='video/mp4' />
+</video>
+<video id="example_video_1" >
+  <source src="file:///C:\Users\MirkinLAB\Documents\Shapespark\teste_israel_2\extra-assets\Original.mp4" type="video/mp4">
+</video>
+<script>
+  // After the scene finishes loading fade out the banner by
+  // using a css tranisition.
+  function hideBanner() {
+    document.getElementById('banner').classList.add('fadeout')
+  };
+
+  // WALK.getExtraAssetUrl can be called only after document is
+  // loaded.
+  window.addEventListener('load', function() {
+    var videoElement = document.getElementById('example_video_1');
+    videoElement.src = WALK.getExtraAssetUrl('Original.mp4');
+  });
+  var viewer = WALK.getViewer();
+  //viewer.onSceneReadyToDisplay(hideBanner);
+</script>

@@ -1,0 +1,78 @@
+<style>
+#picker {
+   position: absolute;
+   top: 0px;
+   width: 256px;
+   z-index: 10;
+}
+
+#picker > img, #picker > video {
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+}
+
+</style>
+<div id="picker">
+<!--
+
+Note that to use images or videos from a different domain as WebGL textures,
+the server needs to allow cross origin requests for such images/videos. Many
+servers are already configured to allow crossorigin="anonymous"
+requests, because such requests do not contain user cookies, so cannot
+access sensitive user data.
+
+https://hacks.mozilla.org/2011/11/using-cors-to-load-webgl-textures-from-cross-domain-images/
+-->
+<img  src="https://cdn0.shapespark.com/demo/ASSETS/textures/brick.jpg"
+  id="brick" crossorigin="anonymous">
+<img src="https://cdn0.shapespark.com/demo/ASSETS/textures/brick2.jpg"
+  id="brick2" crossorigin="anonymous">
+<img src="https://cdn0.shapespark.com/demo/ASSETS/textures/metal.jpg"
+  id="metal" crossorigin="anonymous">
+<img src="https://cdn0.shapespark.com/demo/ASSETS/textures/stone.jpg"
+  id="stone" crossorigin="anonymous">
+<img src="https://cdn0.shapespark.com/demo/ASSETS/textures/tiles.jpg"
+  id="tiles" crossorigin="anonymous">
+<img src="https://cdn0.shapespark.com/demo/ASSETS/textures/yellow.jpg"
+  id="yellow" crossorigin="anonymous">
+<video src="https://www.shapespark.com/v128/img/shapespark-lead-30_1.mp4"
+  id="dots-video" crossorigin="anonymous" autoplay muted loop>
+</video>
+<video src="https://cdn0.shapespark.com/demo/ASSETS/textures/lines-video.mp4"
+  id="lines-video" crossorigin="anonymous" autoplay muted loop>
+</video>
+<video src="https://cdn0.shapespark.com/demo/ASSETS/textures/squares-video.mp4"
+  id="squares-video" crossorigin="anonymous" autoplay muted loop>
+</video>
+</div>
+<script>
+  var viewer = WALK.getViewer();
+  viewer.setMaterialEditable('Material #2145967486');
+  // Alternatively: viewer.setAllMaterialsEditable();
+  var textureElementIds = ['brick', 'brick2', 'metal', 'stone', 'tiles',
+                           'yellow', 'dots-video', 'lines-video',
+                           'squares-video'];
+  textureElementIds.forEach(function(textureElementId) {
+    var textureElement = document.getElementById(textureElementId);
+    var texture = null;
+    textureElement.addEventListener('click', function() {
+      // Create the texture only the first time the texture element is clicked
+      // and reuse it for subsequent clicks.
+      if (texture === null) {
+        if (textureElement instanceof HTMLVideoElement) {
+          // textureElement is <video>
+          texture = viewer.createTextureFromHtmlVideo(textureElement);
+        } else {
+          // textureElement is <img>
+          texture = viewer.createTextureFromHtmlImage(textureElement);
+        }
+      }
+      var material = viewer.findMaterial('Material #2145967486');
+      material.baseColorTexture = texture;
+      // Force the frame to be renderer, otherwise the changed texture
+      // will be visible only after the camera is moved.
+      viewer.requestFrame();
+    });
+  });
+</script>
